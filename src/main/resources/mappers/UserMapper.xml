@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.dao.UserMapper">
+
+  <resultMap id="BaseResultMap" type="com.crm.vo.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_pwd" jdbcType="VARCHAR" property="userPwd" />
+    <result column="true_name" jdbcType="VARCHAR" property="trueName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="is_valid" jdbcType="INTEGER" property="isValid" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, user_name, user_pwd, true_name, email, phone, is_valid, create_date, update_date
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from t_user where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="queryUserByName" parameterType="string" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from t_user where user_name = #{userName}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_user where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.crm.vo.User">
+    insert into t_user (id, user_name, user_pwd, true_name, email, phone, is_valid, create_date, update_date)
+    values (#{id}, #{userName}, #{userPwd}, #{trueName}, #{email}, #{phone}, #{isValid}, #{createDate}, #{updateDate})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.crm.vo.User">
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">id,</if>
+      <if test="userName != null">user_name,</if>
+      <if test="userPwd != null">user_pwd,</if>
+      <if test="trueName != null">true_name,</if>
+      <if test="email != null">email,</if>
+      <if test="phone != null">phone,</if>
+      <if test="isValid != null">is_valid,</if>
+      <if test="createDate != null">create_date,</if>
+      <if test="updateDate != null">update_date,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">#{id},</if>
+      <if test="userName != null">#{userName},</if>
+      <if test="userPwd != null">#{userPwd},</if>
+      <if test="trueName != null">#{trueName},</if>
+      <if test="email != null">#{email},</if>
+      <if test="phone != null">#{phone},</if>
+      <if test="isValid != null">#{isValid},</if>
+      <if test="createDate != null">#{createDate},</if>
+      <if test="updateDate != null">#{updateDate},</if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.crm.vo.User">
+    update t_user
+    <set>
+      <if test="userName != null">user_name = #{userName},</if>
+      <if test="userPwd != null">user_pwd = #{userPwd},</if>
+      <if test="trueName != null">true_name = #{trueName},</if>
+      <if test="email != null">email = #{email},</if>
+      <if test="phone != null">phone = #{phone},</if>
+      <if test="isValid != null">is_valid = #{isValid},</if>
+      <if test="createDate != null">create_date = #{createDate},</if>
+      <if test="updateDate != null">update_date = #{updateDate},</if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.crm.vo.User">
+    update t_user
+    set user_name = #{userName}, user_pwd = #{userPwd}, true_name = #{trueName},
+    email = #{email}, phone = #{phone}, is_valid = #{isValid},
+    create_date = #{createDate}, update_date = #{updateDate}
+    where id = #{id}
+  </update>
+</mapper>
