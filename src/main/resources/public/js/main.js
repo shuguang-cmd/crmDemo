@@ -9,10 +9,12 @@ layui.use(['element', 'layer', 'layuimini','jquery','jquery_cookie'], function (
 
 
     $(".login-out").click(function () {
-        $.removeCookie("userIdStr",{domain:"localhost",path:"/crm"});
-        $.removeCookie("userName",{domain:"localhost",path:"/crm"});
-        $.removeCookie("trueName",{domain:"localhost",path:"/crm"});
-        window.parent.location.href=ctx+"/index";
+        layer.confirm('确定退出系统吗?', {icon: 3, title:'提示'}, function(index){
+            $.removeCookie("userIdStr", {path:ctx});
+            $.removeCookie("userName", {path:ctx});
+            $.removeCookie("trueName", {path:ctx});
+            window.parent.location.href = ctx + "/index";
+        });
     })
 
 

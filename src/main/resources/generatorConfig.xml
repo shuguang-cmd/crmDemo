@@ -6,13 +6,18 @@
     <classPathEntry location="D:/Environment/Java/maven-repo/mysql/mysql-connector-java/8.0.25/mysql-connector-java-8.0.25.jar"/>
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!-- 插件：防止生成的 XML 文件内容重复追加 -->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+
+        <!-- 自动识别数据库表中的备注 -->
         <commentGenerator>
             <property name="suppressDate" value="true"/>
-            <property name="suppressAllComments" value="true"/>
+            <property name="suppressAllComments" value="false"/>
+            <property name="addRemarkComments" value="true"/>
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://127.0.0.1:3306/crm?serverTimezone=GMT%2B8"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/crm?serverTimezone=GMT%2B8&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;nullCatalogMeansCurrent=true"
                         userId="root"
                         password="">
         </jdbcConnection>
@@ -35,6 +40,21 @@
         </javaClientGenerator>
 
         <table tableName="t_user" domainObjectName="User"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false">
+        </table>
+
+        <table tableName="t_sale_chance" domainObjectName="SaleChance"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false">
+        </table>
+
+        <table tableName="t_customer" domainObjectName="Customer"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false">
+        </table>
+
+        <table tableName="t_cus_dev_plan" domainObjectName="CusDevPlan"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false">
         </table>

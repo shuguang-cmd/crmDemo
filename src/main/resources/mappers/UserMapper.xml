@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.crm.dao.UserMapper">
+<mapper namespace="com.xxx.crm.dao.UserMapper">
 
-  <resultMap id="BaseResultMap" type="com.crm.vo.User">
+  <resultMap id="BaseResultMap" type="com.xxx.crm.vo.User">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="user_pwd" jdbcType="VARCHAR" property="userPwd" />
@@ -23,19 +23,37 @@
   </select>
 
   <select id="queryUserByName" parameterType="string" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List" /> from t_user where user_name = #{userName}
+    select <include refid="Base_Column_List" /> from t_user where user_name = #{userName} and is_valid = 1
+  </select>
+
+  <select id="selectByParams" parameterType="com.xxx.base.BaseQuery" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from t_user
+    <where>
+      is_valid = 1
+      <if test="userName != null and userName != ''">
+        and user_name like concat('%', #{userName}, '%')
+      </if>
+      <if test="email != null and email != ''">
+        and email like concat('%', #{email}, '%')
+      </if>
+      <if test="phone != null and phone != ''">
+        and phone like concat('%', #{phone}, '%')
+      </if>
+    </where>
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_user where id = #{id,jdbcType=INTEGER}
+    update t_user set is_valid = 0 where id = #{id,jdbcType=INTEGER}
   </delete>
 
-  <insert id="insert" parameterType="com.crm.vo.User">
-    insert into t_user (id, user_name, user_pwd, true_name, email, phone, is_valid, create_date, update_date)
-    values (#{id}, #{userName}, #{userPwd}, #{trueName}, #{email}, #{phone}, #{isValid}, #{createDate}, #{updateDate})
-  </insert>
+  <delete id="deleteBatch">
+    update t_user set is_valid = 0 where id in
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </delete>
 
-  <insert id="insertSelective" parameterType="com.crm.vo.User">
+  <insert id="insertSelective" parameterType="com.xxx.crm.vo.User">
     insert into t_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">id,</if>
@@ -61,7 +79,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.crm.vo.User">
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxx.crm.vo.User">
     update t_user
     <set>
       <if test="userName != null">user_name = #{userName},</if>
@@ -76,11 +94,4 @@
     where id = #{id}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.crm.vo.User">
-    update t_user
-    set user_name = #{userName}, user_pwd = #{userPwd}, true_name = #{trueName},
-    email = #{email}, phone = #{phone}, is_valid = #{isValid},
-    create_date = #{createDate}, update_date = #{updateDate}
-    where id = #{id}
-  </update>
 </mapper>
